@@ -1,0 +1,1 @@
+this program load image and create histogram.
