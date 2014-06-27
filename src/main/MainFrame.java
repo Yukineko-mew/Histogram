@@ -67,6 +67,7 @@ public class MainFrame extends JFrame {
 		
 		// ヒストグラムの作成
 	    HistogramDataset data = new HistogramDataset();
+	    data.addSeries(null, LoadImage.getHistogramData(), 1);
 	    JFreeChart chart = ChartFactory.createHistogram("Histogram", 
 	                                                    "Frequency",
 	                                                    "Arrivals per minute",

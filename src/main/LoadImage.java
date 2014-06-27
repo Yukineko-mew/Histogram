@@ -17,38 +17,47 @@ import javax.swing.JFrame;
  *
  */
 public class LoadImage {
-	private static BufferedImage loadImage = null;
-	int [][] histogram;
+	private static BufferedImage grayScale = null;
+	private static double [] histogram;
 	
 	public LoadImage( File file ) {
 		try {
-			loadImage = ImageIO.read(file);
+			BufferedImage loadImage = ImageIO.read(file);
+			grayScale = new BufferedImage(loadImage.getWidth(), loadImage.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+			grayScale.getGraphics().drawImage(loadImage, 0, 0, null );
+			histogram = new double[256];
+			for( int i=0; i<histogram.length; i++ ) {
+				histogram[i] = 0;
+			}
 			
 			createHistogramData();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			loadImage = null;
+			grayScale = null;
 			e.printStackTrace();
 		}
 	}
 	
 	private void createHistogramData() {
-		int width = loadImage.getWidth();
-		int height = loadImage.getHeight();
+		int width = grayScale.getWidth();
+		int height = grayScale.getHeight();
 		System.out.println("width=" + width + " height=" + height );
-		histogram = new int[width][height];
 		
 		for(int h=0; h<height; h++) {
 			for(int w=0; w<width; w++) {
-				histogram[w][h] = loadImage.getRGB(w, h);
+				int hist = ImageRGBUtilitiy.r(grayScale.getRGB(w, h));
+				histogram[hist]++;
+//				System.out.println(histogram[w][h]);
+//				System.out.println("R="+ ImageRGBUtilitiy.r(histogram[w][h]) +", G="+ ImageRGBUtilitiy.g(histogram[w][h]) +", B="+ ImageRGBUtilitiy.b(histogram[w][h]));
 			}
 		}
-		System.out.println(histogram[2][4]);
 	}
 	
 	public static BufferedImage getImage() {
-		return loadImage;
+		return grayScale;
 	}
 	
-	
+	public static double[] getHistogramData() {
+		return histogram;
+	}
 }
